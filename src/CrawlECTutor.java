@@ -62,6 +62,8 @@ public class CrawlECTutor {
 			}
 
 			ParseInResult();
+			
+		System.out.println("Program runned!");
 
 	}
 
