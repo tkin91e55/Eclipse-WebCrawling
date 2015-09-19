@@ -30,8 +30,6 @@ public class WebCrawlingMain {
 	public static String CRIT_LOCATION_KEY = "WC_SEARCH_OUT_CRIT";
 	public static String CRIT_PRICE_KEY = "WC_SEARCH_COND_PRICE_ABOVE";
 	public static String[] config_header_mapping = {"TYPE","VALUE"};
-	public static String OUTPUT_DELIMITER = ",";
-	public static String OUTPUT_LINE_ENDING = "\n";
 
 	//Runtime global var
 	static List<Crawlee> crawlees = new ArrayList<Crawlee>();
