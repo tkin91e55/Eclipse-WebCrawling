@@ -1,3 +1,4 @@
+package WebCrawling;
 import java.lang.String;
 import java.util.HashMap;
 import java.util.Collection;
