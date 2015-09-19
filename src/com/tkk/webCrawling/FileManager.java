@@ -1,4 +1,4 @@
-package WebCrawling;
+package com.tkk.webCrawling;
 import java.io.*;
 import java.lang.String;
 import java.text.ParseException;

@@ -1,4 +1,4 @@
-package WebCrawling;
+package com.tkk.webCrawling.webCrawler;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,14 +18,32 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import WebCrawling.BaseCrawler;
+import com.tkk.webCrawling.Crawlee;
+import com.tkk.webCrawling.Crawlee_DB;
+import com.tkk.webCrawling.FileManager;
 
 public class ECTutorCrawler extends BaseCrawler {
 
 	String URL_KEY = "WC_URL";
 	String URL_INDEX_KEY = "WC_INDEX_URL";
 	CrawlerKeyBinding mID = CrawlerKeyBinding.ECTutor;
-
+	
+	//TODO: make this subclass as singleton 
+	private static ECTutorCrawler instance = null;
+	
+	protected ECTutorCrawler () {
+		//exists only to defeat instantiation
+		super();
+	}
+	
+	public static ECTutorCrawler GetInstance() {
+		
+		if (instance == null){
+			instance = new ECTutorCrawler();
+		}
+		
+		return instance;
+	}
 	/*
 	 * TODO: Split this function, too clumsy
 	 */

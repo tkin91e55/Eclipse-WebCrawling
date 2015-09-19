@@ -1,4 +1,4 @@
-package WebCrawling;
+package com.tkk.webCrawling.webCrawler;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.lang.String;
@@ -12,6 +12,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.tkk.webCrawling.CSVmanager;
+import com.tkk.webCrawling.Crawlee;
+import com.tkk.webCrawling.FileManager;
+
 import org.apache.commons.collections4.*;
 import org.apache.commons.collections4.map.MultiValueMap;
 import org.apache.commons.csv.*;
@@ -19,7 +23,11 @@ import org.apache.commons.csv.*;
 public abstract class BaseCrawler {
 
 	public enum CrawlingStates {
-		STATE_PARSE_IN_CONFIG, STATE_PROCESS_URL, STATE_ANALYSE_CONTENT, STATE_SEARCH_CRIT_FILTER, STATE_POSTPROCESS
+		STATE_PARSE_IN_CONFIG,
+		STATE_PROCESS_URL,
+		STATE_ANALYSE_CONTENT,
+		STATE_SEARCH_CRIT_FILTER,
+		STATE_POSTPROCESS
 	}
 
 	/*
@@ -44,6 +52,10 @@ public abstract class BaseCrawler {
 	 */
 	protected MultiMap<String, String> config = new MultiValueMap<String, String>();
 
+	protected BaseCrawler () {
+		System.out.println("[BaseCrawler] constructed called and parse in config");
+	}
+	
 	protected void ParseInResultAction(CrawlerKeyBinding id) {
 		System.out.println("Base ParseInResultAction() Called");
 		String Key = id.toString();
