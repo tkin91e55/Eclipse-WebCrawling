@@ -1,14 +1,9 @@
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.File;
-import java.io.FileWriter;
 import java.lang.String;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Formatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +15,6 @@ import java.util.Date;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import org.apache.commons.collections4.*;
@@ -153,10 +147,10 @@ public class WebCrawlingMain {
 
 		System.out.println("[Jsoup] location: " + location.text() + " and lastUpdate: " + lastUpdate.text());
 
-		for (int i = 0; i < eles.size(); i++){
-			Element ele = eles.get(i);
+		//for (int i = 0; i < eles.size(); i++){
+			//Element ele = eles.get(i);
 			//System.out.println("[Jsoup] ele text: " + ele.text());
-		}
+		//}
 
 		Crawlee crawlee = new Crawlee(indx);
 		//location
