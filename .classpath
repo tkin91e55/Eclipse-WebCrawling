@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/tkingkwun/Development/Github/WebCrawling/commons-collections4-4.0.jar"/>
-	<classpathentry kind="lib" path="/Users/tkingkwun/Development/Github/WebCrawling/commons-csv-1.1.jar"/>
-	<classpathentry kind="lib" path="/Users/tkingkwun/Development/Github/WebCrawling/jsoup-1.8.2.jar"/>
+	<classpathentry kind="lib" path="/Users/tkingkwun/Development/Github/WebCrawling_eclipse/commons-collections4-4.0.jar"/>
+	<classpathentry kind="lib" path="/Users/tkingkwun/Development/Github/WebCrawling_eclipse/commons-csv-1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/tkingkwun/Development/Github/WebCrawling_eclipse/jsoup-1.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
