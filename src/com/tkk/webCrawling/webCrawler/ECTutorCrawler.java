@@ -21,6 +21,7 @@ import org.jsoup.select.Elements;
 import com.tkk.webCrawling.Crawlee;
 import com.tkk.webCrawling.Crawlee_DB;
 import com.tkk.webCrawling.FileManager;
+import com.tkk.webCrawling.utils.*;
 
 public class ECTutorCrawler extends BaseCrawler {
 
@@ -92,6 +93,8 @@ public class ECTutorCrawler extends BaseCrawler {
 
 			System.out.println("[DB] DBagent size: " + DBagent.Size());
 
+			Stopwatch timer = new Stopwatch();
+			
 			// Do searches on remote website contents
 			for (String index : onboard_indices) {
 				// System.out.println("[On-board] idx : " + str);
@@ -119,6 +122,8 @@ public class ECTutorCrawler extends BaseCrawler {
 					}
 				}
 			}
+
+			System.out.println("[Timer] elapsed time: " + timer.GetElapsedTime());
 
 		}
 	}

@@ -1,16 +1,8 @@
 package com.tkk.webCrawling.webCrawler;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.lang.String;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import com.tkk.webCrawling.CSVmanager;
 import com.tkk.webCrawling.Crawlee;
