@@ -20,7 +20,7 @@ import org.apache.commons.collections4.*;
 import org.apache.commons.collections4.map.MultiValueMap;
 import org.apache.commons.csv.*;
 
-public abstract class BaseCrawler {
+public abstract class BaseCrawler extends Thread {
 
 	public enum CrawlingStates {
 		STATE_PARSE_IN_CONFIG,
@@ -51,10 +51,24 @@ public abstract class BaseCrawler {
 	 * Need it be protected?
 	 */
 	protected MultiMap<String, String> config = new MultiValueMap<String, String>();
-
+    protected String threadName = "default";
+    protected Thread thread;
+    
 	protected BaseCrawler (CrawlerKeyBinding id) {
 		System.out.println("[BaseCrawler] constructed called and parse in config");
 		ParseInResultAction(id);
+		if(thread == null){
+			thread = new Thread(this, threadName);
+			System.out.println("[thread] thread, " + threadName + " created.");
+		}
+	}
+	
+	public void StartRun() {
+		if(thread != null){
+			thread.start();
+		}else{
+			System.err.println("thread not initialized");
+		}
 	}
 	
 	protected void ParseInResultAction(CrawlerKeyBinding id) {
