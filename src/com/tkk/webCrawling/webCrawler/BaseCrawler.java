@@ -52,13 +52,17 @@ public abstract class BaseCrawler {
 	 */
 	protected MultiMap<String, String> config = new MultiValueMap<String, String>();
 
-	protected BaseCrawler () {
+	protected BaseCrawler (CrawlerKeyBinding id) {
 		System.out.println("[BaseCrawler] constructed called and parse in config");
+		ParseInResultAction(id);
 	}
 	
 	protected void ParseInResultAction(CrawlerKeyBinding id) {
 		System.out.println("Base ParseInResultAction() Called");
 		String Key = id.toString();
+		
+		System.out.println("[ParseInResultAction] Key is: "+ Key);
+		
 		try {
 			FileManager csvHdr = new CSVmanager(CONFIG_FILE);
 			List<CSVRecord> csvRecords = ((CSVmanager) csvHdr).CreateParseInRecord(config_header_mapping);
@@ -70,7 +74,7 @@ public abstract class BaseCrawler {
 				String key = record.get(config_header_mapping[1]);
 				String val = record.get(config_header_mapping[2]);
 
-				if (Key == webKey) {
+				if ( Key.equals(webKey)){
 					System.out.println("[Apache] apache commons csv here, The WebKey: " + webKey + ", TYPE: " + key
 							+ " and the VALUE: " + val);
 

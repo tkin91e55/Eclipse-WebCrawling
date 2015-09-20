@@ -26,14 +26,15 @@ public class ECTutorCrawler extends BaseCrawler {
 
 	String URL_KEY = "WC_URL";
 	String URL_INDEX_KEY = "WC_INDEX_URL";
-	CrawlerKeyBinding mID = CrawlerKeyBinding.ECTutor;
+	static final CrawlerKeyBinding mID = CrawlerKeyBinding.ECTutor;
 	
 	//TODO: make this subclass as singleton 
 	private static ECTutorCrawler instance = null;
 	
 	protected ECTutorCrawler () {
 		//exists only to defeat instantiation
-		super();
+		super(mID);
+		
 	}
 	
 	public static ECTutorCrawler GetInstance() {
@@ -43,6 +44,21 @@ public class ECTutorCrawler extends BaseCrawler {
 		}
 		
 		return instance;
+	}
+	
+	public void Start() {
+		MainLoop();
+	}
+	
+	protected void MainLoop () {
+		try{
+		ProcessUrlsAction();
+		FilterByCritAction();
+		PostProcessAction();
+		}
+		catch (Exception e){
+			System.err.println(e);
+		}
 	}
 	/*
 	 * TODO: Split this function, too clumsy
