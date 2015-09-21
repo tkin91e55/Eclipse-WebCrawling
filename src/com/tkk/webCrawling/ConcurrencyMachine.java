@@ -1,10 +1,16 @@
 package com.tkk.webCrawling;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.tkk.webCrawling.utils.Stopwatch;
 
@@ -28,12 +34,50 @@ public class ConcurrencyMachine {
 			"158417", "158418" };
 	// For experiment: end
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		
+		ExecutorService executorService = Executors.newFixedThreadPool(5);
+        List<Future<Document>> handles = new ArrayList<Future<Document>>();
+        List<Callable<Document>> requests = new ArrayList<Callable<Document>>();
+       
+        Document d = Jsoup.connect("http://www.betexplorer.com/results/").timeout(0).get();
+        Elements elements = d.select("a");        
+        Iterator<Element> it = elements.iterator();
+        Element e;        
+        while(it.hasNext()) {
+            e = it.next();
+            //System.out.println(e.attr("href"));            
+            if (e.attr("href").startsWith("/soccer")) {
+                requests.add(new Request("http://www.betexplorer.com"+e.attr("href")));
+            }
+        }        
+       
+        System.out.println("soccer requests size : "+requests.size());
+        System.out.println(Arrays.deepToString(requests.toArray()));
+       
+       
+       
+        for (Callable<Document> request : requests) {
+            handles.add(executorService.submit(request));
+        }
+       
+       
+        for (Future<Document> h : handles) {
+            try {
+                d = h.get();
+                System.out.println(d.title());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+       
+        executorService.shutdownNow();
 
 		Stopwatch timer = new Stopwatch();
 
 		// Do searches on remote website contents
-		for (String index : caseIndexes) {
+		/*for (String index : caseIndexes) {
 			// System.out.println("[On-board] idx : " + str);
 
 			String URL = mainUrl + index;
@@ -43,17 +87,17 @@ public class ConcurrencyMachine {
 			try {
 				Document caseDoc = Jsoup.connect(URL).data("query", "Java").userAgent("Mozilla").cookie("auth", "token")
 						.timeout(6000).post();
-				/*if (!caseDoc.text().contains("Server Error")) {
+				if (!caseDoc.text().contains("Server Error")) {
 					String title = caseDoc.title();
 					System.out.println("[Doc] Title: " + title);
 					String result = caseDoc.text();
 					System.out.println("[Doc] Result: " + result);
-				}*/
+				}
 			} catch (IOException e) {
 				System.err.println(e);
 			}
 
-		}
+		}*/
 
 		System.out.println("[Timer] elapsed time: " + timer.GetElapsedTime());
 	}
@@ -72,4 +116,30 @@ public class ConcurrencyMachine {
 		//if input source object queue is not zero, there should be thread not sleep
 		//this thread priority may be low and sleep for a short moment
 	}
+}
+
+class Request implements  Callable<Document> {
+	   
+    public final String url;
+ 
+    public Request(String url) {
+        this.url = url;
+    }    
+   
+ 
+    public Document call() throws Exception {
+         Document doc = null;
+        try {
+            doc = Jsoup.connect(url).timeout(0).get();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.out.println("\n\n\t\t"+url+"\n\n");
+        }
+        return doc;
+    }
+ 
+    @Override
+    public String toString() {
+        return "Request{" + "url=" + url + '}';
+    }
 }
