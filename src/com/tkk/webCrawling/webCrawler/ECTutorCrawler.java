@@ -28,35 +28,35 @@ public class ECTutorCrawler extends BaseCrawler {
 	String URL_KEY = "WC_URL";
 	String URL_INDEX_KEY = "WC_INDEX_URL";
 	static final CrawlerKeyBinding mID = CrawlerKeyBinding.ECTutor;
-	
+
 	private static ECTutorCrawler instance = null;
-	
-	protected ECTutorCrawler () {
-		//exists only to defeat instantiation
+
+	protected ECTutorCrawler() {
+		// exists only to defeat instantiation
 		super(mID);
 		threadName = "ECTutor-thread";
 	}
-	
+
 	public static ECTutorCrawler GetInstance() {
-		
-		if (instance == null){
+
+		if (instance == null) {
 			instance = new ECTutorCrawler();
 		}
-		
+
 		return instance;
 	}
-	
-	//Start to run function, shall not be called from external
+
+	// Start to run function, shall not be called from external
 	public void run() {
-		try{
-		ProcessUrlsAction();
-		FilterByCritAction();
-		PostProcessAction();
-		}
-		catch (Exception e){
+		try {
+			ProcessUrlsAction();
+			FilterByCritAction();
+			PostProcessAction();
+		} catch (Exception e) {
 			System.err.println(e);
 		}
 	}
+
 	/*
 	 * TODO: Split this function, too clumsy
 	 */
@@ -69,6 +69,10 @@ public class ECTutorCrawler extends BaseCrawler {
 
 		@SuppressWarnings({ "unchecked" })
 		Collection<String> idx_urls = (Collection<String>) config.get(URL_INDEX_KEY);
+
+		// suppose should only one matching URL_KEY for those on-board indices
+		@SuppressWarnings({ "unchecked" })
+		String url = ((List<String>) config.get(URL_KEY)).get(0);
 
 		// load inx board page to get on-board indices
 		for (String idx_url : idx_urls) {
@@ -94,31 +98,29 @@ public class ECTutorCrawler extends BaseCrawler {
 			System.out.println("[DB] DBagent size: " + DBagent.Size());
 
 			Stopwatch timer = new Stopwatch();
-			
+
 			// Do searches on remote website contents
 			for (String index : onboard_indices) {
 				// System.out.println("[On-board] idx : " + str);
-				@SuppressWarnings({ "unchecked" })
-				Collection<String> urls = (Collection<String>) config.get(URL_KEY);
-				for (String url : urls) {
-					String URL = url + index;
+				String URL = url + index;
 
-					System.out.println("[ProcessUrl] url connected: " + URL);
+				System.out.println("[ProcessUrl] url connected: " + URL);
 
-					Document caseDoc = Jsoup.connect(URL).data("query", "Java").userAgent("Mozilla")
-							.cookie("auth", "token").timeout(6000).post();
-					if (!caseDoc.text().contains("Server Error")) {
-						// String title = caseDoc.title();
-						// System.out.println("[Doc] Title: " + title);
-						// String result = caseDoc.text();
-						// System.out.println("[Doc] Result: " + result);
-						Crawlee crawlee = AnalyzeContentAction(caseDoc, Integer.parseInt(index)); // crawlees got filled
+				Document caseDoc = Jsoup.connect(URL).data("query", "Java").userAgent("Mozilla").cookie("auth", "token")
+						.timeout(6000).post();
+				if (!caseDoc.text().contains("Server Error")) {
+					// String title = caseDoc.title();
+					// System.out.println("[Doc] Title: " + title);
+					// String result = caseDoc.text();
+					// System.out.println("[Doc] Result: " + result);
+					Crawlee crawlee = AnalyzeContentAction(caseDoc, Integer.parseInt(index)); // crawlees
+																								// got
+																								// filled
 
-						// Add qualified curled case to csv,
-						// Crawlee_DB.WriteToDBFile()
-						if (!DBagent.LookUpFromDB(crawlee, runTime)) {
-							crawlees.add(crawlee);
-						}
+					// Add qualified curled case to csv,
+					// Crawlee_DB.WriteToDBFile()
+					if (!DBagent.LookUpFromDB(crawlee, runTime)) {
+						crawlees.add(crawlee);
 					}
 				}
 			}
@@ -176,7 +178,7 @@ public class ECTutorCrawler extends BaseCrawler {
 		return crawlee;
 	}
 
-	 protected void FilterByCritAction() {
+	protected void FilterByCritAction() {
 
 		for (Iterator<Crawlee> crawlee_ite = crawlees.iterator(); crawlee_ite.hasNext();) {
 			Crawlee crawlee = crawlee_ite.next();
@@ -236,26 +238,25 @@ public class ECTutorCrawler extends BaseCrawler {
 		}
 		return false;
 	}
-	
-	protected void PostProcessAction () {
-		//Result:
-		for (Crawlee cr: crawlees){
+
+	protected void PostProcessAction() {
+		// Result:
+		for (Crawlee cr : crawlees) {
 			System.out.println("[SearchCrit] Remaining crawlee: " + cr.case_index);
 		}
-		try{
-		ParseInResult();
-		}
-		catch (IOException ex){
+		try {
+			ParseInResult();
+		} catch (IOException ex) {
 			System.err.println(ex);
 		}
 	}
-	
-	void ParseInResult () throws IOException {
 
-		//Parsing
+	void ParseInResult() throws IOException {
+
+		// Parsing
 		FileManager filewriter = new FileManager("result.csv");
-		filewriter.AppendOnNewLine(new SimpleDateFormat().format(new Date()) + " 's update:",false); 
-		for (Crawlee cr: crawlees){
+		filewriter.AppendOnNewLine(new SimpleDateFormat().format(new Date()) + " 's update:", false);
+		for (Crawlee cr : crawlees) {
 			filewriter.AppendOnNewLine("The case index: " + cr.case_index);
 			filewriter.AppendOnNewLine(cr.Context());
 		}
