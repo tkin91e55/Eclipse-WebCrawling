@@ -65,7 +65,7 @@ public class ECTutorCrawler extends BaseCrawler {
 		System.out.println("ECTutor ProcessUrlsAction() Called");
 		super.ProcessUrlsAction();
 
-		Date runTime = new Date();
+		List<String> onboard_indices = new ArrayList<String>();
 
 		@SuppressWarnings({ "unchecked" })
 		Collection<String> idx_urls = (Collection<String>) config.get(URL_INDEX_KEY);
@@ -81,7 +81,6 @@ public class ECTutorCrawler extends BaseCrawler {
 			Document idxDoc = Jsoup.connect(idx_url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token")
 					.timeout(6000).post();
 
-			List<String> onboard_indices = new ArrayList<String>();
 			Pattern atrbt = Pattern.compile("bk_case_[0-9]{6}");
 			Matcher idxMatcher = atrbt.matcher(idxDoc.body().toString());
 
@@ -90,16 +89,20 @@ public class ECTutorCrawler extends BaseCrawler {
 				str = str.substring(str.lastIndexOf('_') + 1);
 				onboard_indices.add(str);
 			}
+		}
 
 			Collections.sort(onboard_indices);
+			
+			for (String index: onboard_indices){
+				int idx = Integer.parseInt(index);
+				crawlees.add(new Crawlee(idx,url+index,this));
+			}
 
-			Crawlee_DB DBagent = new Crawlee_DB();
-
-			System.out.println("[DB] DBagent size: " + DBagent.Size());
-
-			Stopwatch timer = new Stopwatch();
+			//Crawlee_DB DBagent = new Crawlee_DB();
+			//System.out.println("[DB] DBagent size: " + DBagent.Size());
 
 			// Do searches on remote website contents
+		    /*Date runTime = new Date();
 			for (String index : onboard_indices) {
 				// System.out.println("[On-board] idx : " + str);
 				String URL = url + index;
@@ -113,9 +116,7 @@ public class ECTutorCrawler extends BaseCrawler {
 					// System.out.println("[Doc] Title: " + title);
 					// String result = caseDoc.text();
 					// System.out.println("[Doc] Result: " + result);
-					Crawlee crawlee = AnalyzeContentAction(caseDoc, Integer.parseInt(index)); // crawlees
-																								// got
-																								// filled
+					Crawlee crawlee = AnalyzeContentAction(caseDoc, Integer.parseInt(index)); //crawlees got filled
 
 					// Add qualified curled case to csv,
 					// Crawlee_DB.WriteToDBFile()
@@ -123,11 +124,7 @@ public class ECTutorCrawler extends BaseCrawler {
 						crawlees.add(crawlee);
 					}
 				}
-			}
-
-			System.out.println("[Timer] elapsed time: " + timer.GetElapsedTime());
-
-		}
+			}*/
 	}
 
 	/*
@@ -149,33 +146,24 @@ public class ECTutorCrawler extends BaseCrawler {
 		System.out.println("[ECTutor] part");
 		System.out.println("[Jsoup] location: " + location.text() + " and lastUpdate: " + lastUpdate.text());
 
-		// for (int i = 0; i < eles.size(); i++){
-		// Element ele = eles.get(i);
-		// System.out.println("[Jsoup] ele text: " + ele.text());
-		// }
-
 		Crawlee crawlee = new Crawlee(indx);
-		// location
 		crawlee.Put("Location", "Location: " + location.text());
-		// LastupdateAt
 		crawlee.Put("LastUpdateAt", "Last Update: " + lastUpdate.text());
-		// Time
 		crawlee.Put("Time", eles.get(0).text());
-		// Gender
 		crawlee.Put("Gender", eles.get(1).text());
-		// Info
 		crawlee.Put("Info", eles.get(2).text());
-		// Subject
 		crawlee.Put("Subject", eles.get(3).text());
-		// Fee
 		crawlee.Put("Fee", eles.get(4).text());
-		// Other
 		crawlee.Put("Other", eles.get(5).text());
 
 		System.out.println(
 				"[Crawlee] crawlees size: " + crawlees.size() + " and the cralwee content: \n" + crawlee.Context());
 		System.out.println("[ECTutor] part end");
 		return crawlee;
+	}
+
+	public void AnalyzeContentAction(Crawlee crawlee) {
+
 	}
 
 	protected void FilterByCritAction() {
@@ -193,7 +181,7 @@ public class ECTutorCrawler extends BaseCrawler {
 			}
 
 			if (beDeleted) {
-				System.out.println("[SearchCrit] Going to delete crawlee: " + crawlee.case_index);
+				System.out.println("[SearchCrit] Going to delete crawlee: " + crawlee.getCase_index());
 				crawlee_ite.remove();
 			}
 		}
@@ -242,7 +230,7 @@ public class ECTutorCrawler extends BaseCrawler {
 	protected void PostProcessAction() {
 		// Result:
 		for (Crawlee cr : crawlees) {
-			System.out.println("[SearchCrit] Remaining crawlee: " + cr.case_index);
+			System.out.println("[SearchCrit] Remaining crawlee: " + cr.getCase_index());
 		}
 		try {
 			ParseInResult();
@@ -257,10 +245,14 @@ public class ECTutorCrawler extends BaseCrawler {
 		FileManager filewriter = new FileManager("result.csv");
 		filewriter.AppendOnNewLine(new SimpleDateFormat().format(new Date()) + " 's update:", false);
 		for (Crawlee cr : crawlees) {
-			filewriter.AppendOnNewLine("The case index: " + cr.case_index);
+			filewriter.AppendOnNewLine("The case index: " + cr.getCase_index());
 			filewriter.AppendOnNewLine(cr.Context());
 		}
 		filewriter.Close();
 	}
 
+	@Override
+	public String toString() {
+		return "ECTutorCrawler";
+	}
 }

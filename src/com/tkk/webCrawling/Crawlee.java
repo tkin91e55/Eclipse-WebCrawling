@@ -2,28 +2,55 @@ package com.tkk.webCrawling;
 
 import java.lang.String;
 import java.util.HashMap;
+import java.util.concurrent.*;
 import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import com.tkk.webCrawling.webCrawler.*;
 
-public class Crawlee {
+public class Crawlee implements Callable<Document> {
 
 	enum State {
 		SUCCESS, FAILURE, QUEUE, TIME_OUT
 	}
 
-	public int case_index;
-	public HashMap<String, String> map = new HashMap<String, String>();
-	public State response;
+	int case_index;
+	public int getCase_index() {
+		return case_index;
+	}
+	
+	String url;
+	public String getUrl() {
+		return url;
+	}
+
+	public BaseCrawler getCrawlerBelonged() {
+		return crawlerBelonged;
+	}
 	BaseCrawler crawlerBelonged;
+	
+	public HashMap<String, String> map = new HashMap<String, String>();
+	public State state;
 
 	/*
 	 * Current keys of HashMap are:
 	 * Location,LastUpdateAt,Time,Gender,Info,Subject,Fee,Other
 	 */
 
-	public Crawlee(int idx) {
+	public Crawlee(int idx, String aUrl, BaseCrawler crawler) {
+		state = State.SUCCESS;
+		case_index = idx;
+		url = aUrl;
+		crawlerBelonged = crawler;
+		
+	}
+	
+	public Crawlee(int idx){
 		case_index = idx;
 	}
 
@@ -64,6 +91,10 @@ public class Crawlee {
 		}
 
 		return "";
+	}
+	
+	public Document call(){
+		return null;
 	}
 
 }

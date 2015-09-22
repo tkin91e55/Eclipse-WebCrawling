@@ -13,15 +13,25 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.tkk.webCrawling.utils.Stopwatch;
+import com.tkk.webCrawling.webCrawler.*;
 
 public class ConcurrencyMachine {
 
-	// TODO: it should be a singleton
-
 	static final int maxWorkerNumber = 5;
+	private static ConcurrencyMachine instance = null;
+	
+	public static ConcurrencyMachine GetInstance() {
+
+		if (instance == null) {
+			instance = new ConcurrencyMachine();
+		}
+
+		return instance;
+	}
 
 	// TODO: there is a queue of workers, input source object
 	// TODO: this object should subscribe to worker's status
+	// TODO: runtime should be recorded just about to mass crawl, refer to ECTutor
 
 	// For experiment
 	static String mainUrl = "http://www.ectutor.com/popup_case.php?id=";
@@ -70,7 +80,7 @@ public class ConcurrencyMachine {
 
 		
 		try{
-		//By this method, all Future runned and then this parent jump to next line
+			//By this method, all Future runned and then this parent jump to next line
 		List<Future<Document>> workingQuests = executorService.invokeAll(requests);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -105,7 +115,7 @@ public class ConcurrencyMachine {
 	/*
 	 * Create a new worker
 	 */
-	void CreateWorker() {
+	void CreateWorkers() {
 		// if
 	}
 
