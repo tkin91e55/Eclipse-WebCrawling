@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import com.tkk.webCrawling.webCrawler.*;
 
@@ -21,22 +20,29 @@ public class Crawlee implements Callable<Document> {
 	}
 
 	private int case_index;
+
 	public int getCase_index() {
 		return case_index;
 	}
-	
+
 	private String url;
+
 	public String getUrl() {
 		return url;
 	}
 
 	private BaseCrawler crawlerBelonged;
+
 	public BaseCrawler getCrawlerBelonged() {
 		return crawlerBelonged;
 	}
-	
+
 	private Document Jdoc;
-	
+
+	public Document getJdoc() {
+		return Jdoc;
+	}
+
 	public HashMap<String, String> map = new HashMap<String, String>();
 	public State state;
 
@@ -50,10 +56,10 @@ public class Crawlee implements Callable<Document> {
 		case_index = idx;
 		url = aUrl;
 		crawlerBelonged = crawler;
-		
+
 	}
-	
-	public Crawlee(int idx){
+
+	public Crawlee(int idx) {
 		case_index = idx;
 	}
 
@@ -95,17 +101,25 @@ public class Crawlee implements Callable<Document> {
 
 		return "";
 	}
-	
-	public Document call(){
+
+	public Document call() {
 		try {
 			// doc = Jsoup.connect(url).timeout(600).get();
 			Jdoc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)
 					.get();
+			
+			String errStr = "Server Error";
+			if (Jdoc.title().contains(errStr) || Jdoc.text().contains(errStr)){
+				state = State.FAILURE;
+			}else{
+				state = State.SUCCESS;
+			}
+			
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			// System.out.println("\n\n\t\t"+url+"\n\n");
+			System.err.println("[Jsoup]by experience, if IO exception, could be timeout");
+			state = State.TIME_OUT;
 		}
 		return Jdoc;
 	}
-
 }

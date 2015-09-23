@@ -50,8 +50,8 @@ public class ECTutorCrawler extends BaseCrawler {
 	public void run() {
 		try {
 			ProcessUrlsAction();
-			FilterByCritAction();
-			PostProcessAction();
+			// FilterByCritAction();
+			// PostProcessAction();
 		} catch (Exception e) {
 			System.err.println(e);
 		}
@@ -60,10 +60,9 @@ public class ECTutorCrawler extends BaseCrawler {
 	/*
 	 * TODO: Split this function, too clumsy
 	 */
-	protected void ProcessUrlsAction() throws IOException, ParseException {
+	protected void ProcessUrlsAction() {
 
-		System.out.println("ECTutor ProcessUrlsAction() Called");
-		super.ProcessUrlsAction();
+		// super.ProcessUrlsAction();
 
 		List<String> onboard_indices = new ArrayList<String>();
 
@@ -78,75 +77,67 @@ public class ECTutorCrawler extends BaseCrawler {
 		for (String idx_url : idx_urls) {
 			System.out.println("The idx url: " + idx_url);
 
-			Document idxDoc = Jsoup.connect(idx_url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token")
-					.timeout(6000).post();
+			try {
+				Document idxDoc = Jsoup.connect(idx_url).data("query", "Java").userAgent("Mozilla")
+						.cookie("auth", "token").timeout(6000).post();
 
-			Pattern atrbt = Pattern.compile("bk_case_[0-9]{6}");
-			Matcher idxMatcher = atrbt.matcher(idxDoc.body().toString());
+				Pattern atrbt = Pattern.compile("bk_case_[0-9]{6}");
+				Matcher idxMatcher = atrbt.matcher(idxDoc.body().toString());
 
-			while (idxMatcher.find()) {
-				String str = idxMatcher.group();
-				str = str.substring(str.lastIndexOf('_') + 1);
-				onboard_indices.add(str);
+				while (idxMatcher.find()) {
+					String str = idxMatcher.group();
+					str = str.substring(str.lastIndexOf('_') + 1);
+					onboard_indices.add(str);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 
-			Collections.sort(onboard_indices);
-			
-			for (String index: onboard_indices){
-				int idx = Integer.parseInt(index);
-				crawlees.add(new Crawlee(idx,url+index,this));
-			}
+		Collections.sort(onboard_indices);
 
-			//Crawlee_DB DBagent = new Crawlee_DB();
-			//System.out.println("[DB] DBagent size: " + DBagent.Size());
+		for (String index : onboard_indices) {
+			int idx = Integer.parseInt(index);
+			crawlees.add(new Crawlee(idx, url + index, this));
+		}
 
-			// Do searches on remote website contents
-		    /*Date runTime = new Date();
-			for (String index : onboard_indices) {
-				// System.out.println("[On-board] idx : " + str);
-				String URL = url + index;
+		// Crawlee_DB DBagent = new Crawlee_DB();
+		// System.out.println("[DB] DBagent size: " + DBagent.Size());
 
-				System.out.println("[ProcessUrl] url connected: " + URL);
-
-				Document caseDoc = Jsoup.connect(URL).data("query", "Java").userAgent("Mozilla").cookie("auth", "token")
-						.timeout(6000).post();
-				if (!caseDoc.text().contains("Server Error")) {
-					// String title = caseDoc.title();
-					// System.out.println("[Doc] Title: " + title);
-					// String result = caseDoc.text();
-					// System.out.println("[Doc] Result: " + result);
-					Crawlee crawlee = AnalyzeContentAction(caseDoc, Integer.parseInt(index)); //crawlees got filled
-
-					// Add qualified curled case to csv,
-					// Crawlee_DB.WriteToDBFile()
-					if (!DBagent.LookUpFromDB(crawlee, runTime)) {
-						crawlees.add(crawlee);
-					}
-				}
-			}*/
+		// Do searches on remote website contents
+		/*
+		 * Date runTime = new Date(); for (String index : onboard_indices) { //
+		 * System.out.println("[On-board] idx : " + str); String URL = url +
+		 * index;
+		 * 
+		 * System.out.println("[ProcessUrl] url connected: " + URL);
+		 * 
+		 * Document caseDoc = Jsoup.connect(URL).data("query",
+		 * "Java").userAgent("Mozilla").cookie("auth", "token")
+		 * .timeout(6000).post(); if (!caseDoc.text().contains("Server Error"))
+		 * { // String title = caseDoc.title(); // System.out.println(
+		 * "[Doc] Title: " + title); // String result = caseDoc.text(); //
+		 * System.out.println("[Doc] Result: " + result); Crawlee crawlee =
+		 * AnalyzeContentAction(caseDoc, Integer.parseInt(index)); //crawlees
+		 * got filled
+		 * 
+		 * // Add qualified curled case to csv, // Crawlee_DB.WriteToDBFile() if
+		 * (!DBagent.LookUpFromDB(crawlee, runTime)) { crawlees.add(crawlee); }
+		 * } }
+		 */
 	}
 
-	/*
-	 * TODO: Split this function, too clumsy
-	 */
-	Crawlee AnalyzeContentAction(Document doc, int indx) throws IOException {
-
+	public void AnalyzeContentAction(Crawlee crawlee) {
+		Document doc = crawlee.getJdoc();
 		HashMap<String, String> searchNodes = new HashMap<String, String>();
 		searchNodes.put("Location", "span[class$=title]");
 		searchNodes.put("LastUpdateAt", "span[class$=loginTime]");
-		// searchNodes.put("Detail","div[class$=detail]:eq(1) > p:eq(2)");
 		searchNodes.put("Details", "div[class$=detail] > div[class$=item]");
-		// String JsoupSearchNode_CONTENT = "div[class$=detail]:eq(1)";
 
 		Elements location = doc.select(searchNodes.get("Location"));
 		Elements lastUpdate = doc.select(searchNodes.get("LastUpdateAt"));
 		Elements eles = doc.select(searchNodes.get("Details"));
 
-		System.out.println("[ECTutor] part");
-		System.out.println("[Jsoup] location: " + location.text() + " and lastUpdate: " + lastUpdate.text());
-
-		Crawlee crawlee = new Crawlee(indx);
 		crawlee.Put("Location", "Location: " + location.text());
 		crawlee.Put("LastUpdateAt", "Last Update: " + lastUpdate.text());
 		crawlee.Put("Time", eles.get(0).text());
@@ -155,15 +146,6 @@ public class ECTutorCrawler extends BaseCrawler {
 		crawlee.Put("Subject", eles.get(3).text());
 		crawlee.Put("Fee", eles.get(4).text());
 		crawlee.Put("Other", eles.get(5).text());
-
-		System.out.println(
-				"[Crawlee] crawlees size: " + crawlees.size() + " and the cralwee content: \n" + crawlee.Context());
-		System.out.println("[ECTutor] part end");
-		return crawlee;
-	}
-
-	public void AnalyzeContentAction(Crawlee crawlee) {
-
 	}
 
 	protected void FilterByCritAction() {

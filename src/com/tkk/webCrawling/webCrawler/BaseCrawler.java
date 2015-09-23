@@ -57,7 +57,7 @@ public abstract class BaseCrawler extends Thread {
 	
 	public void StartRun() {
 		if(thread != null){
-			thread.start();
+			thread.start(); //jump to the run function to see what to do
 		}else{
 			System.err.println("thread not initialized");
 		}
@@ -94,7 +94,7 @@ public abstract class BaseCrawler extends Thread {
 	}
 
 	//TODO: can prevent the throws here?
-	protected void ProcessUrlsAction() throws IOException, ParseException {
+	protected void ProcessUrlsAction() {
 		System.out.println("Base ProcessUrlsAction() Called");
 	}
 

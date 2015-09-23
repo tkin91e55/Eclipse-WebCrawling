@@ -9,6 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.csv.*;
 
+/*
+ * This class is supposed to be a global singleton,
+ * otherwise need structural change.
+ */
 public class Crawlee_DB {
 
 	class DateCrawlee {
@@ -37,7 +41,7 @@ public class Crawlee_DB {
 
 	private static Crawlee_DB instance;
 
-	public Crawlee_DB GetInstance() {
+	public static Crawlee_DB GetInstance() {
 		if (instance == null) {
 			try {
 				instance = new Crawlee_DB();
