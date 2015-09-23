@@ -176,7 +176,7 @@ public class Crawlee_DB {
 		// boolean hasSameMatch = true;
 		for (DateCrawlee record : records) {
 			MatchBeforeWriteDBLoopCnt++;
-			if (record.crawlee.case_index == aCrle.case_index) {
+			if (record.crawlee.getCase_index() == aCrle.getCase_index()) {
 				// should check info, since the student info should strongly
 				// bind to the case index
 				String infoValue = CommaTransform(aCrle.GetValueByKey("Info"));
@@ -202,7 +202,7 @@ public class Crawlee_DB {
 		}
 		if (!hasSameMatch)
 			System.out.println("[DB matching] DB matching return false as no same matching, and remote crawlee id: "
-					+ aCrle.case_index);
+					+ aCrle.getCase_index());
 		return hasSameMatch;
 	}
 
@@ -218,7 +218,7 @@ public class Crawlee_DB {
 
 		writer.Append("\"" + timeFormat.format(discoverTime) + "\",");
 
-		writer.Append("\"" + newEntry.case_index + "\",");
+		writer.Append("\"" + newEntry.getCase_index() + "\",");
 
 		String location = newEntry.GetValueByKey("Location");
 		location = CommaTransform(location);

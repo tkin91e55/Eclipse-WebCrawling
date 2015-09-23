@@ -17,7 +17,8 @@ import com.tkk.webCrawling.webCrawler.*;
 
 public class ConcurrencyMachine {
 
-	static final int maxWorkerNumber = 5;
+	//TODO: this value is got by testing, different machines should redo.
+	static final int maxWorkerNumber = 15;
 	private static ConcurrencyMachine instance = null;
 	
 	public static ConcurrencyMachine GetInstance() {
@@ -35,21 +36,16 @@ public class ConcurrencyMachine {
 
 	// For experiment
 	static String mainUrl = "http://www.ectutor.com/popup_case.php?id=";
-	/*
-	 * static String[] caseIndexes = { "155081", "156238", "156287", "156295",
-	 * "156299", "156300", "156306", "156309", "156323", "156324", "156332",
-	 * "157788", "158080", "158111", "158129", "158155", "158276", "158282",
-	 * "158297", "158315", "158317", "158321", "158324", "158330", "158343",
-	 * "158347", "158352", "158355", "158365", "158378", "158380", "158382",
-	 * "158383", "158384", "158386", "158387", "158388", "158389", "158390",
-	 * "158393", "158394", "158395", "158396", "158397", "158399", "158400",
-	 * "158401", "158402", "158403", "158405", "158406", "158407", "158408",
-	 * "158409", "158410", "158413", "158415", "158416", "158417", "158418" };
-	 */
 	static String[] caseIndexes = { "155081" };
 	// For experiment: end
+	
+	ExecutorService executorService;
+	
+	public ConcurrencyMachine () {
+		executorService = Executors.newFixedThreadPool(maxWorkerNumber);
+	}
 
-	public static void main(String[] args) throws IOException {
+	public void Main(String[] args) throws IOException {
 
 		ExecutorService executorService = Executors.newFixedThreadPool(16);
 		List<Future<Document>> handles = new ArrayList<Future<Document>>();
@@ -78,10 +74,9 @@ public class ConcurrencyMachine {
 
 		Stopwatch timer = new Stopwatch();
 
-		
 		try{
 			//By this method, all Future runned and then this parent jump to next line
-		List<Future<Document>> workingQuests = executorService.invokeAll(requests);
+			handles = executorService.invokeAll(requests);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -138,7 +133,7 @@ class Request implements Callable<Document> {
 		this.url = url;
 	}
 
-	public Document call() throws Exception {
+	public Document call() {
 		try {
 			// doc = Jsoup.connect(url).timeout(600).get();
 			doc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)

@@ -1,5 +1,6 @@
 package com.tkk.webCrawling;
 
+import java.io.IOException;
 import java.lang.String;
 import java.util.HashMap;
 import java.util.concurrent.*;
@@ -19,20 +20,22 @@ public class Crawlee implements Callable<Document> {
 		SUCCESS, FAILURE, QUEUE, TIME_OUT
 	}
 
-	int case_index;
+	private int case_index;
 	public int getCase_index() {
 		return case_index;
 	}
 	
-	String url;
+	private String url;
 	public String getUrl() {
 		return url;
 	}
 
+	private BaseCrawler crawlerBelonged;
 	public BaseCrawler getCrawlerBelonged() {
 		return crawlerBelonged;
 	}
-	BaseCrawler crawlerBelonged;
+	
+	private Document Jdoc;
 	
 	public HashMap<String, String> map = new HashMap<String, String>();
 	public State state;
@@ -94,7 +97,15 @@ public class Crawlee implements Callable<Document> {
 	}
 	
 	public Document call(){
-		return null;
+		try {
+			// doc = Jsoup.connect(url).timeout(600).get();
+			Jdoc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)
+					.get();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			// System.out.println("\n\n\t\t"+url+"\n\n");
+		}
+		return Jdoc;
 	}
 
 }
