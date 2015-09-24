@@ -290,13 +290,8 @@ public class Crawlee_DB {
 
 		bufferedCSVReader.Close();
 		bufferedCSVReader = new FileManager(DB_HISTORY);
-		output.AppendBufferedOnNewLine(bufferedCSVReader.ReadLine());// write
-																		// first
-																		// line
-																		// which
-																		// is
-																		// the
-																		// headers
+		//write the first line which is the headers
+		output.AppendBufferedOnNewLine(bufferedCSVReader.ReadLine());
 
 		int count = 0;
 

@@ -17,6 +17,7 @@ public class WebCrawlingMain {
 		//ConcurrencyMachine.getInstance().publicMethodMassCurl()
 		ecTutorWorker.StartRun(); //this StartRun() does call the thread to start to run
 		
+		
 		//TODO: WAIT, until crawled and crawlee mature, write to same DB file
 		//need to lock the log file
 		
