@@ -3,13 +3,14 @@ package com.tkk.webCrawling;
 import com.tkk.webCrawling.webCrawler.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.*;
 
 public class WebCrawlingMain {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		// DB flushing
 		Crawlee_DB.GetInstance();
@@ -70,6 +71,19 @@ public class WebCrawlingMain {
 		for (BaseCrawler crlr : crawlers) {
 		crlr.PostProcessAction();
 		}
+		
+		// Parsing
+		FileManager filewriter = new FileManager("result.csv");
+		filewriter.AppendOnNewLine(new SimpleDateFormat().format(new Date()) + " 's update:", false);
+		for (Crawlee cr : ECTutorCrawler.GetInstance().getCrawlees()) {
+			filewriter.AppendOnNewLine("The case index: " + cr.getCase_index());
+			filewriter.AppendOnNewLine(cr.Context());
+		}
+		for (Crawlee cr : L4TutorCrawler.GetInstance().getCrawlees()) {
+			filewriter.AppendOnNewLine("The case index: " + cr.getCase_index());
+			filewriter.AppendOnNewLine(cr.Context());
+		}
+		filewriter.Close();
 
 		System.out.println("Program main runned to LAST line!");
 

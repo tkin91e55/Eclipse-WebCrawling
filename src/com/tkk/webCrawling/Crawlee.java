@@ -68,7 +68,7 @@ public class Crawlee implements Callable<Document> {
 	}
 
 	public String Context() {
-		String content = "";
+		String content = "Website: " + crawlerBelonged.toString() + System.getProperty("line.separator");
 		Collection<String> strings = map.values();
 		for (String str : strings) {
 			content = content + str + System.getProperty("line.separator");
@@ -104,7 +104,6 @@ public class Crawlee implements Callable<Document> {
 
 	public Document call() {
 		try {
-			// doc = Jsoup.connect(url).timeout(600).get();
 			Jdoc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)
 					.get();
 			

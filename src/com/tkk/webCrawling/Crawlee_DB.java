@@ -28,7 +28,7 @@ public class Crawlee_DB {
 	}
 
 	static String DB_HISTORY = "case_DB.csv";
-	static String[] library_header_mapping = { "DISCOVERED DATE", "AND TIME", "INDEX", "LOCATION", "TUTOR TIME",
+	static String[] library_header_mapping = { "DISCOVERED DATE", "AND TIME","WEBSITE", "INDEX", "LOCATION", "TUTOR TIME",
 			"GENDER", "INFO", "SUBJECT", "FEE", "OTHER" };
 
 	static public SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -93,8 +93,8 @@ public class Crawlee_DB {
 	void ReadFromDB() throws FileNotFoundException, IOException {
 
 		// Create CSV reader
-		// {"DISCOVERD DATE","AND TIME","INDEX","LOCATION","TUTOR
-		// TIME","GENDER","INFO","SUBJECT","FEE","OTHER"}
+		// { "DISCOVERED DATE", "AND TIME","WEBSITE", "INDEX", "LOCATION", "TUTOR TIME",
+		// "GENDER", "INFO", "SUBJECT", "FEE", "OTHER" }
 		CSVmanager csvParser = new CSVmanager(DB_HISTORY);
 
 		List<CSVRecord> DB = csvParser.CreateParseInRecord(library_header_mapping);
@@ -104,15 +104,16 @@ public class Crawlee_DB {
 		for (int i = 1; i < DB.size(); i++) {
 			CSVRecord record = DB.get(i);
 
-			Crawlee sample = new Crawlee(Integer.parseInt(record.get(library_header_mapping[2])));
-
-			sample.Put("Location", record.get(library_header_mapping[3]));
-			sample.Put("Time", record.get(library_header_mapping[4]));
-			sample.Put("Gender", record.get(library_header_mapping[5]));
-			sample.Put("Info", record.get(library_header_mapping[6]));
-			sample.Put("Subject", record.get(library_header_mapping[7]));
-			sample.Put("Fee", record.get(library_header_mapping[8]));
-			sample.Put("Other", record.get(library_header_mapping[9]));
+			Crawlee sample = new Crawlee(Integer.parseInt(record.get(library_header_mapping[3])));
+			
+			sample.Put("Website", record.get(library_header_mapping[2]));
+			sample.Put("Location", record.get(library_header_mapping[4]));
+			sample.Put("Time", record.get(library_header_mapping[5]));
+			sample.Put("Gender", record.get(library_header_mapping[6]));
+			sample.Put("Info", record.get(library_header_mapping[7]));
+			sample.Put("Subject", record.get(library_header_mapping[8]));
+			sample.Put("Fee", record.get(library_header_mapping[9]));
+			sample.Put("Other", record.get(library_header_mapping[10]));
 
 			Date recordDay = new Date();
 			Date recordTime = new Date();
@@ -314,7 +315,7 @@ public class Crawlee_DB {
 					TimeUnit.MILLISECONDS) < 0) {
 				// record entry too old, not writing to the case_DB.csv
 				System.out.print("[Flusing] count: " + count + ", and [Sampling]: "
-						+ record.get(library_header_mapping[6]) + ", and readDay: " + dayFormat.format(readDay));
+						+ record.get(library_header_mapping[7]) + ", and readDay: " + dayFormat.format(readDay));
 				System.out.println(" Line Deleted.");
 				needArchive = true;
 				System.out.println("");

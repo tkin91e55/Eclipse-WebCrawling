@@ -115,6 +115,7 @@ public class L4TutorCrawler extends BaseCrawler {
 
 		crawlee.Put("Location", "Location: " + location.text());
 		crawlee.Put("LastUpdateAt", "Last Update: " + lastUpdate.text());
+		crawlee.Put("Website", this.toString());
 		crawlee.Put("Time", eles.get(0).text());
 		crawlee.Put("Gender", eles.get(1).text());
 		crawlee.Put("Info", eles.get(2).text());
@@ -151,23 +152,6 @@ public class L4TutorCrawler extends BaseCrawler {
 		for (Crawlee cr : crawlees) {
 			System.out.println("[SearchCrit] Remaining crawlee: " + cr.getCase_index());
 		}
-		try {
-			ParseInResult();
-		} catch (IOException ex) {
-			System.err.println(ex);
-		}
-	}
-
-	void ParseInResult() throws IOException {
-
-		// Parsing
-		FileManager filewriter = new FileManager("result.csv");
-		filewriter.AppendOnNewLine(new SimpleDateFormat().format(new Date()) + " 's update:", false);
-		for (Crawlee cr : crawlees) {
-			filewriter.AppendOnNewLine("The case index: " + cr.getCase_index());
-			filewriter.AppendOnNewLine(cr.Context());
-		}
-		filewriter.Close();
 	}
 
 	@Override
