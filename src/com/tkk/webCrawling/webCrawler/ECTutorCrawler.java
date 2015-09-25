@@ -134,9 +134,9 @@ public class ECTutorCrawler extends BaseCrawler {
 			Crawlee crawlee = crawlee_ite.next();
 			Boolean beDeleted = true;
 
-			if (FilterInBySubject(crawlee, config)) {
-				if (!FilterByFee(crawlee, config)) {
-					if (FilterOutByLocation(crawlee, config)) {
+			if (FilterInBySubject(crawlee.GetValueByKey("Subject"))) {
+				if (!FilterByFee(crawlee)) {
+					if (FilterOutByLocation(crawlee.Context())) {
 						beDeleted = false;
 					}
 				}
@@ -147,46 +147,6 @@ public class ECTutorCrawler extends BaseCrawler {
 				crawlee_ite.remove();
 			}
 		}
-	}
-
-	Boolean FilterByFee(Crawlee crawlee, MultiMap<String, String> config) {
-		int price_above = -1;
-		@SuppressWarnings({ "unchecked" })
-		Collection<String> price_str = (Collection<String>) config.get(CRIT_PRICE_KEY);
-		price_above = Integer.parseInt((String) price_str.toArray()[0]);
-		if (price_above != -1) {
-			if (crawlee.GetFee() > price_above)
-				return false;
-		}
-		return true;
-	}
-
-	Boolean FilterOutByLocation(Crawlee crawlee, MultiMap<String, String> config) {
-
-		@SuppressWarnings({ "unchecked" })
-		Collection<String> location_Strs = (Collection<String>) config.get(CRIT_LOCATION_KEY);
-
-		for (String aCrit : location_Strs) {
-			Pattern crit = Pattern.compile(aCrit);
-			Matcher matcher = crit.matcher(crawlee.GetValueByKey("Location"));
-			if (matcher.find())
-				return false;
-		}
-		return true;
-	}
-
-	Boolean FilterInBySubject(Crawlee crawlee, MultiMap<String, String> config) {
-
-		@SuppressWarnings({ "unchecked" })
-		Collection<String> subject_Strs = (Collection<String>) config.get(CRIT_SUBJECT_KEY);
-
-		for (String aCrit : subject_Strs) {
-			Pattern crit = Pattern.compile(aCrit);
-			Matcher matcher = crit.matcher(crawlee.GetValueByKey("Subject"));
-			if (matcher.find())
-				return true;
-		}
-		return false;
 	}
 
 	public void PostProcessAction() {

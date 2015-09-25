@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.lang.String;
 import java.text.ParseException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.tkk.webCrawling.CSVmanager;
 import com.tkk.webCrawling.Crawlee;
@@ -110,6 +112,46 @@ public abstract class BaseCrawler extends Thread {
 
 	public void FilterByCritAction() {
 		mState = CrawlingStates.STATE_SEARCH_CRIT_FILTER;
+	}
+	
+	protected Boolean FilterByFee(Crawlee crawlee) {
+		int price_above = -1;
+		@SuppressWarnings({ "unchecked" })
+		Collection<String> price_str = (Collection<String>) config.get(CRIT_PRICE_KEY);
+		price_above = Integer.parseInt((String) price_str.toArray()[0]);
+		if (price_above != -1) {
+			if (crawlee.GetFee() > price_above)
+				return false;
+		}
+		return true;
+	}
+
+	protected Boolean FilterOutByLocation(String crwlVal) {
+
+		@SuppressWarnings({ "unchecked" })
+		Collection<String> location_Strs = (Collection<String>) config.get(CRIT_LOCATION_KEY);
+
+		for (String aCrit : location_Strs) {
+			Pattern crit = Pattern.compile(aCrit);
+			Matcher matcher = crit.matcher(crwlVal);
+			if (matcher.find())
+				return false;
+		}
+		return true;
+	}
+
+	protected Boolean FilterInBySubject(String crwlVal) {
+
+		@SuppressWarnings({ "unchecked" })
+		Collection<String> subject_Strs = (Collection<String>) config.get(CRIT_SUBJECT_KEY);
+
+		for (String aCrit : subject_Strs) {
+			Pattern crit = Pattern.compile(aCrit);
+			Matcher matcher = crit.matcher(crwlVal);
+			if (matcher.find())
+				return true;
+		}
+		return false;
 	}
 
 	public void PostProcessAction() {
