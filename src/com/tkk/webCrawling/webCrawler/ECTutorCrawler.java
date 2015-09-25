@@ -1,11 +1,9 @@
 package com.tkk.webCrawling.webCrawler;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +15,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.tkk.webCrawling.Crawlee;
-import com.tkk.webCrawling.FileManager;
 
 public class ECTutorCrawler extends BaseCrawler {
 
@@ -114,7 +111,7 @@ public class ECTutorCrawler extends BaseCrawler {
 
 		crawlee.Put("Location", "Location: " + location.text());
 		crawlee.Put("LastUpdateAt", "Last Update: " + lastUpdate.text());
-		crawlee.Put("Website", this.toString());
+		crawlee.Put("Website","Website: " + this.toString());
 		crawlee.Put("Time", eles.get(0).text());
 		crawlee.Put("Gender", eles.get(1).text());
 		crawlee.Put("Info", eles.get(2).text());

@@ -68,7 +68,7 @@ public class Crawlee implements Callable<Document> {
 	}
 
 	public String Context() {
-		String content = "Website: " + crawlerBelonged.toString() + System.getProperty("line.separator");
+		String content = "";
 		Collection<String> strings = map.values();
 		for (String str : strings) {
 			content = content + str + System.getProperty("line.separator");
@@ -106,16 +106,16 @@ public class Crawlee implements Callable<Document> {
 		try {
 			Jdoc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)
 					.get();
-			
+
 			String errStr = "Server Error";
-			if (Jdoc.title().contains(errStr) || Jdoc.text().contains(errStr)){
+			if (Jdoc.title().contains(errStr) || Jdoc.text().contains(errStr)) {
 				state = State.FAILURE;
-				//TODO: retry if you can
-			}else{
+				// TODO: retry if you can
+			} else {
 				state = State.SUCCESS;
 				crawlerBelonged.AnalyzeContentAction(this);
 			}
-			
+
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			System.err.println("[Jsoup]by experience, if IO exception, could be timeout");

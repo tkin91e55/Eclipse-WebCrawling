@@ -28,8 +28,8 @@ public class Crawlee_DB {
 	}
 
 	static String DB_HISTORY = "case_DB.csv";
-	static String[] library_header_mapping = { "DISCOVERED DATE", "AND TIME","WEBSITE", "INDEX", "LOCATION", "TUTOR TIME",
-			"GENDER", "INFO", "SUBJECT", "FEE", "OTHER" };
+	static String[] library_header_mapping = { "DISCOVERED DATE", "AND TIME", "WEBSITE", "INDEX", "LOCATION",
+			"TUTOR TIME", "GENDER", "INFO", "SUBJECT", "FEE", "OTHER" };
 
 	static public SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
 	static public SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
@@ -93,7 +93,8 @@ public class Crawlee_DB {
 	void ReadFromDB() throws FileNotFoundException, IOException {
 
 		// Create CSV reader
-		// { "DISCOVERED DATE", "AND TIME","WEBSITE", "INDEX", "LOCATION", "TUTOR TIME",
+		// { "DISCOVERED DATE", "AND TIME","WEBSITE", "INDEX", "LOCATION",
+		// "TUTOR TIME",
 		// "GENDER", "INFO", "SUBJECT", "FEE", "OTHER" }
 		CSVmanager csvParser = new CSVmanager(DB_HISTORY);
 
@@ -105,7 +106,7 @@ public class Crawlee_DB {
 			CSVRecord record = DB.get(i);
 
 			Crawlee sample = new Crawlee(Integer.parseInt(record.get(library_header_mapping[3])));
-			
+
 			sample.Put("Website", record.get(library_header_mapping[2]));
 			sample.Put("Location", record.get(library_header_mapping[4]));
 			sample.Put("Time", record.get(library_header_mapping[5]));
@@ -180,6 +181,10 @@ public class Crawlee_DB {
 		boolean hasSameMatch = false;
 		// boolean hasSameMatch = true;
 		for (DateCrawlee record : records) {
+
+			if (!record.crawlee.GetValueByKey("Website").equals(aCrle.GetValueByKey("Website")))
+				continue;
+
 			MatchBeforeWriteDBLoopCnt++;
 			if (record.crawlee.getCase_index() == aCrle.getCase_index()) {
 				// should check info, since the student info should strongly
@@ -222,6 +227,8 @@ public class Crawlee_DB {
 		writer.Append("\"" + dayFormat.format(today) + "\",");
 
 		writer.Append("\"" + timeFormat.format(discoverTime) + "\",");
+
+		writer.Append("\"" + newEntry.GetValueByKey("Website") + "\",");
 
 		writer.Append("\"" + newEntry.getCase_index() + "\",");
 
@@ -291,7 +298,7 @@ public class Crawlee_DB {
 
 		bufferedCSVReader.Close();
 		bufferedCSVReader = new FileManager(DB_HISTORY);
-		//write the first line which is the headers
+		// write the first line which is the headers
 		output.AppendBufferedOnNewLine(bufferedCSVReader.ReadLine());
 
 		int count = 0;
