@@ -67,8 +67,6 @@ public abstract class BaseCrawler extends Thread {
 		
 		String Key = id.toString();
 		
-		System.out.println("[ParseInResultAction] Key is: "+ Key);
-		
 		//no need to protect csvHdr, as it is just local variable
 		try {
 			FileManager csvHdr = new CSVmanager(CONFIG_FILE);
@@ -82,8 +80,8 @@ public abstract class BaseCrawler extends Thread {
 				String val = record.get(config_header_mapping[2]);
 
 				if ( Key.equals(webKey)){
-					System.out.println("[Apache] apache commons csv here, The WebKey: " + webKey + ", TYPE: " + key
-							+ " and the VALUE: " + val);
+					//System.out.println("[Apache] apache commons csv here, The WebKey: " + webKey + ", TYPE: " + key
+							//+ " and the VALUE: " + val);
 
 					config.put(key, val);
 				}
