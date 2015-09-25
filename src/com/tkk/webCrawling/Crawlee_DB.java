@@ -144,7 +144,7 @@ public class Crawlee_DB {
 	static public int WriteToDBcount = 0;
 	static public int WriteToDBLoopCnt = 0;
 
-	public boolean LookUpFromDB(Crawlee aCrle, Date time) throws IOException {
+	public synchronized boolean LookUpFromDB(Crawlee aCrle, Date time) throws IOException {
 		boolean isNewDBentry = (!MatchBeforeWriteDB(aCrle) | records.size() == 0);
 		// boolean isNewDBentry = !MatchBeforeWriteDB(aCrle);
 		// System.out.println("[DB,matching] isNewDBentry: " + isNewDBentry + "

@@ -69,6 +69,7 @@ public abstract class BaseCrawler extends Thread {
 		
 		System.out.println("[ParseInResultAction] Key is: "+ Key);
 		
+		//no need to protect csvHdr, as it is just local variable
 		try {
 			FileManager csvHdr = new CSVmanager(CONFIG_FILE);
 			List<CSVRecord> csvRecords = ((CSVmanager) csvHdr).CreateParseInRecord(config_header_mapping);
@@ -91,6 +92,10 @@ public abstract class BaseCrawler extends Thread {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
+	}
+	
+	public List<Crawlee> getCrawlees () {
+		return crawlees;
 	}
 
 	//TODO: can prevent the throws here?

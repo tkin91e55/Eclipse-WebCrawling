@@ -18,6 +18,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.tkk.webCrawling.ConcurrencyMachine;
 import com.tkk.webCrawling.Crawlee;
 import com.tkk.webCrawling.Crawlee_DB;
 import com.tkk.webCrawling.FileManager;
@@ -100,7 +101,9 @@ public class ECTutorCrawler extends BaseCrawler {
 			int idx = Integer.parseInt(index);
 			crawlees.add(new Crawlee(idx, url + index, this));
 		}
-
+		
+		ConcurrencyMachine.GetInstance().RegisterQueue(crawlees);
+		System.out.println("[ECTutor crawlees] size 2: " + this.getCrawlees().size());
 		// Crawlee_DB DBagent = new Crawlee_DB();
 		// System.out.println("[DB] DBagent size: " + DBagent.Size());
 
