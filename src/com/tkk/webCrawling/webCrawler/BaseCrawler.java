@@ -64,7 +64,8 @@ public abstract class BaseCrawler extends Thread {
 	}
 	
 	protected void ParseInResultAction(CrawlerKeyBinding id) {
-		System.out.println("Base ParseInResultAction() Called");
+		mState = CrawlingStates.STATE_PARSE_IN_CONFIG;
+		
 		String Key = id.toString();
 		
 		System.out.println("[ParseInResultAction] Key is: "+ Key);
@@ -100,19 +101,19 @@ public abstract class BaseCrawler extends Thread {
 
 	//TODO: can prevent the throws here?
 	protected void ProcessUrlsAction() {
-		System.out.println("Base ProcessUrlsAction() Called");
+		mState = CrawlingStates.STATE_PROCESS_URL;
 	}
 
 	public void AnalyzeContentAction(Crawlee crwl) {
-		System.out.println("Base AnalyzeContentAction() Called");
+		mState = CrawlingStates.STATE_ANALYSE_CONTENT;
 	}
 
-	protected void FilterByCritAction() {
-		System.out.println("Base FilterByCritAction() Called");
+	public void FilterByCritAction() {
+		mState = CrawlingStates.STATE_SEARCH_CRIT_FILTER;
 	}
 
-	protected void PostProcessAction() {
-		System.out.println("Base PostProcessAction() Called");
+	public void PostProcessAction() {
+		mState = CrawlingStates.STATE_POSTPROCESS;
 	}
 
 }

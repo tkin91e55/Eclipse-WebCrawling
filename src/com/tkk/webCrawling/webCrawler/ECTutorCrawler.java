@@ -51,8 +51,6 @@ public class ECTutorCrawler extends BaseCrawler {
 	public void run() {
 		try {
 			ProcessUrlsAction();
-			// FilterByCritAction();
-			// PostProcessAction();
 		} catch (Exception e) {
 			System.err.println(e);
 		}
@@ -103,33 +101,9 @@ public class ECTutorCrawler extends BaseCrawler {
 				crawlees.add(new Crawlee(idx, url + index, this));
 			}
 
-			//System.out.println("[ECTutor crawlees] size 2: " + this.getCrawlees().size());
+			System.out.println("[ECTutor crawlees] size: " + this.getCrawlees().size());
 			crawlees.notify();
 		}
-		// Crawlee_DB DBagent = new Crawlee_DB();
-		// System.out.println("[DB] DBagent size: " + DBagent.Size());
-
-		// Do searches on remote website contents
-		/*
-		 * Date runTime = new Date(); for (String index : onboard_indices) { //
-		 * System.out.println("[On-board] idx : " + str); String URL = url +
-		 * index;
-		 * 
-		 * System.out.println("[ProcessUrl] url connected: " + URL);
-		 * 
-		 * Document caseDoc = Jsoup.connect(URL).data("query",
-		 * "Java").userAgent("Mozilla").cookie("auth", "token")
-		 * .timeout(6000).post(); if (!caseDoc.text().contains("Server Error"))
-		 * { // String title = caseDoc.title(); // System.out.println(
-		 * "[Doc] Title: " + title); // String result = caseDoc.text(); //
-		 * System.out.println("[Doc] Result: " + result); Crawlee crawlee =
-		 * AnalyzeContentAction(caseDoc, Integer.parseInt(index)); //crawlees
-		 * got filled
-		 * 
-		 * // Add qualified curled case to csv, // Crawlee_DB.WriteToDBFile() if
-		 * (!DBagent.LookUpFromDB(crawlee, runTime)) { crawlees.add(crawlee); }
-		 * } }
-		 */
 	}
 
 	public void AnalyzeContentAction(Crawlee crawlee) {
@@ -153,8 +127,9 @@ public class ECTutorCrawler extends BaseCrawler {
 		crawlee.Put("Other", eles.get(5).text());
 	}
 
-	protected void FilterByCritAction() {
-
+	public void FilterByCritAction() {
+		super.FilterByCritAction();
+		
 		for (Iterator<Crawlee> crawlee_ite = crawlees.iterator(); crawlee_ite.hasNext();) {
 			Crawlee crawlee = crawlee_ite.next();
 			Boolean beDeleted = true;
@@ -214,7 +189,8 @@ public class ECTutorCrawler extends BaseCrawler {
 		return false;
 	}
 
-	protected void PostProcessAction() {
+	public void PostProcessAction() {
+		super.PostProcessAction();
 		// Result:
 		for (Crawlee cr : crawlees) {
 			System.out.println("[SearchCrit] Remaining crawlee: " + cr.getCase_index());
