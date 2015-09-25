@@ -52,7 +52,7 @@ public class Crawlee implements Callable<Document> {
 	 */
 
 	public Crawlee(int idx, String aUrl, BaseCrawler crawler) {
-		state = State.SUCCESS;
+		state = State.QUEUE;
 		case_index = idx;
 		url = aUrl;
 		crawlerBelonged = crawler;
@@ -111,8 +111,10 @@ public class Crawlee implements Callable<Document> {
 			String errStr = "Server Error";
 			if (Jdoc.title().contains(errStr) || Jdoc.text().contains(errStr)){
 				state = State.FAILURE;
+				//TODO: retry if you can
 			}else{
 				state = State.SUCCESS;
+				crawlerBelonged.AnalyzeContentAction(this);
 			}
 			
 		} catch (IOException ex) {

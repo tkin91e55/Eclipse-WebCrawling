@@ -95,15 +95,17 @@ public class ECTutorCrawler extends BaseCrawler {
 			}
 		}
 
-		Collections.sort(onboard_indices);
+		synchronized (crawlees) {
+			Collections.sort(onboard_indices);
 
-		for (String index : onboard_indices) {
-			int idx = Integer.parseInt(index);
-			crawlees.add(new Crawlee(idx, url + index, this));
+			for (String index : onboard_indices) {
+				int idx = Integer.parseInt(index);
+				crawlees.add(new Crawlee(idx, url + index, this));
+			}
+
+			//System.out.println("[ECTutor crawlees] size 2: " + this.getCrawlees().size());
+			crawlees.notify();
 		}
-		
-		ConcurrencyMachine.GetInstance().RegisterQueue(crawlees);
-		System.out.println("[ECTutor crawlees] size 2: " + this.getCrawlees().size());
 		// Crawlee_DB DBagent = new Crawlee_DB();
 		// System.out.println("[DB] DBagent size: " + DBagent.Size());
 

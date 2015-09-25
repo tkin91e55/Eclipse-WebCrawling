@@ -103,7 +103,7 @@ public abstract class BaseCrawler extends Thread {
 		System.out.println("Base ProcessUrlsAction() Called");
 	}
 
-	protected void AnalyzeContentAction() {
+	public void AnalyzeContentAction(Crawlee crwl) {
 		System.out.println("Base AnalyzeContentAction() Called");
 	}
 
