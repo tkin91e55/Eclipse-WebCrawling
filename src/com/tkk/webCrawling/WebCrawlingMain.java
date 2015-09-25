@@ -15,15 +15,15 @@ public class WebCrawlingMain {
 		Crawlee_DB.GetInstance();
 
 		// declared all the websites
-		BaseCrawler ecTutorWorker = ECTutorCrawler.GetInstance();
+		BaseCrawler l4TutorWorker = L4TutorCrawler.GetInstance();
 
 		// WAIT, until constructors finish and have websites get their
 		// board indexes
-		List<Crawlee> eCrawlees = ecTutorWorker.getCrawlees();
+		List<Crawlee> eCrawlees = l4TutorWorker.getCrawlees();
 
 		synchronized (eCrawlees) {
 			try {
-				ecTutorWorker.StartRun();
+				l4TutorWorker.StartRun();
 				eCrawlees.wait();
 
 			} catch (InterruptedException e) {
@@ -31,7 +31,7 @@ public class WebCrawlingMain {
 			}
 		}
 
-		System.out.println("[ECTutor crawlees] size 2: " + ecTutorWorker.getCrawlees().size());
+		System.out.println("[ECTutor crawlees] size 2: " + l4TutorWorker.getCrawlees().size());
 		ConcurrencyMachine.GetInstance().RegisterQueue(eCrawlees);
 		ConcurrencyMachine.GetInstance().InvokeQueue();
 
@@ -52,15 +52,15 @@ public class WebCrawlingMain {
 			}
 		}
 		
-		System.out.println("[ECTutor crawlees] size 3: " + ecTutorWorker.getCrawlees().size());
+		System.out.println("[ECTutor crawlees] size 3: " + l4TutorWorker.getCrawlees().size());
 
-		ecTutorWorker.FilterByCritAction();
+		l4TutorWorker.FilterByCritAction();
 
-		System.out.println("[ECTutor crawlees] size 4: " + ecTutorWorker.getCrawlees().size());
+		System.out.println("[ECTutor crawlees] size 4: " + l4TutorWorker.getCrawlees().size());
 
 		// WAIT, until writing DB file, write result file (this is
 		// postprocessing)
-		ecTutorWorker.PostProcessAction();
+		l4TutorWorker.PostProcessAction();
 
 		System.out.println("Program main runned to LAST line!");
 

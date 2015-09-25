@@ -19,24 +19,25 @@ import org.jsoup.select.Elements;
 import com.tkk.webCrawling.Crawlee;
 import com.tkk.webCrawling.FileManager;
 
-public class ECTutorCrawler extends BaseCrawler {
+public class L4TutorCrawler extends BaseCrawler {
 
 	String URL_KEY = "WC_URL";
 	String URL_INDEX_KEY = "WC_INDEX_URL";
-	static final CrawlerKeyBinding mID = CrawlerKeyBinding.ECTutor;
-	static final String threadName = "ECTutor-thread";
+	static final CrawlerKeyBinding mID = CrawlerKeyBinding.L4Tutor;
+	static final String threadName = "L4Tutor-thread";
 
-	private static ECTutorCrawler instance = null;
+	private static L4TutorCrawler instance = null;
 
-	protected ECTutorCrawler() {
+	protected L4TutorCrawler() {
 		// exists only to defeat instantiation
 		super(mID,threadName);
+
 	}
 
-	public static ECTutorCrawler GetInstance() {
+	public static L4TutorCrawler GetInstance() {
 
 		if (instance == null) {
-			instance = new ECTutorCrawler();
+			instance = new L4TutorCrawler();
 		}
 
 		return instance;
@@ -96,7 +97,7 @@ public class ECTutorCrawler extends BaseCrawler {
 				crawlees.add(new Crawlee(idx, url + index, this));
 			}
 
-			System.out.println("[ECTutor crawlees] size: " + this.getCrawlees().size());
+			System.out.println("[L4Tutor crawlees] size: " + this.getCrawlees().size());
 			crawlees.notify();
 		}
 	}
@@ -171,6 +172,6 @@ public class ECTutorCrawler extends BaseCrawler {
 
 	@Override
 	public String toString() {
-		return "ECTutorCrawler";
+		return "L4TutorCrawler";
 	}
 }

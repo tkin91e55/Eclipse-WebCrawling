@@ -1,7 +1,5 @@
 package com.tkk.webCrawling.webCrawler;
-import java.io.IOException;
 import java.lang.String;
-import java.text.ParseException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,10 +43,9 @@ public abstract class BaseCrawler extends Thread {
 	 * Need it be protected?
 	 */
 	protected MultiMap<String, String> config = new MultiValueMap<String, String>();
-    protected String threadName = "default";
     protected Thread thread;
     
-	protected BaseCrawler (CrawlerKeyBinding id) {
+	protected BaseCrawler (CrawlerKeyBinding id,String threadName) {
 		System.out.println("[BaseCrawler] constructed called and parse in config");
 		ParseInResultAction(id);
 		if(thread == null){

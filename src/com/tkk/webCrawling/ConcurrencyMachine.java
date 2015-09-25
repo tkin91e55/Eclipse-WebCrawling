@@ -1,19 +1,10 @@
 package com.tkk.webCrawling;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
-
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import com.tkk.webCrawling.utils.Stopwatch;
-import com.tkk.webCrawling.webCrawler.*;
 
 public class ConcurrencyMachine {
 
