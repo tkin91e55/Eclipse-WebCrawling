@@ -17,8 +17,9 @@ public class WebCrawlingMain {
 
 		// declared all the websites
 		List<BaseCrawler> crawlers = new ArrayList<BaseCrawler>();
-		crawlers.add(ECTutorCrawler.GetInstance());
-		crawlers.add(L4TutorCrawler.GetInstance());
+		//crawlers.add(ECTutorCrawler.GetInstance());
+		//crawlers.add(L4TutorCrawler.GetInstance());
+		crawlers.add(TutorGroupCrawler.GetInstance());
 
 		// WAIT, until constructors finish and have websites get their
 		// board indexes
@@ -39,7 +40,7 @@ public class WebCrawlingMain {
 			ConcurrencyMachine.GetInstance().RegisterQueue(crles);
 		}
 
-		ConcurrencyMachine.GetInstance().InvokeQueue();
+		/*ConcurrencyMachine.GetInstance().InvokeQueue();
 
 		// WAIT, until crawled and crawlee mature, write to same DB file
 		// need to lock the log file
@@ -83,7 +84,7 @@ public class WebCrawlingMain {
 			filewriter.AppendOnNewLine("The case index: " + cr.getCase_index());
 			filewriter.AppendOnNewLine(cr.Context());
 		}
-		filewriter.Close();
+		filewriter.Close();*/
 
 		System.out.println("Program main runned to LAST line!");
 
