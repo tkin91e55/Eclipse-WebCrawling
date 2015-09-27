@@ -102,7 +102,6 @@ public class Crawlee implements Callable<Document> {
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	public Document call() {
 		try {
 			
