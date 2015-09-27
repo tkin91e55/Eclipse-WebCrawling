@@ -17,12 +17,11 @@ public class TutorGroupCrawler extends BaseCrawler {
 
 	public static String URL_KEY = "WC_URL";
 
-	public static final CrawlerKeyBinding mID = CrawlerKeyBinding.TutorGroup;
 	static final String threadName = "TutorGroup-thread";
 	private static TutorGroupCrawler instance = null;
 
 	protected TutorGroupCrawler() {
-		super(mID, threadName);
+		super(BaseCrawler.CrawlerKeyBinding.TutorGroup, threadName);
 	}
 
 	public static TutorGroupCrawler GetInstance() {
@@ -117,9 +116,9 @@ public class TutorGroupCrawler extends BaseCrawler {
 				System.out.println(contentStr);
 
 				Crawlee tmpCrle = new Crawlee(0, "", this);
+				tmpCrle.Put("Website", "Website: " + this.toString());
 				tmpCrle.Put("Fee", "Fee: " + GetFee(headingStr));
 				tmpCrle.Put("Info", "Info :" + headingStr);
-				tmpCrle.Put("Website", "Website: " + this.toString());
 				tmpCrle.Put("Other", "Other: " + contentStr);
 
 				Crles.add(tmpCrle);
@@ -153,7 +152,7 @@ public class TutorGroupCrawler extends BaseCrawler {
 			}
 
 			if (beDeleted) {
-				System.out.println("[SearchCrit] Going to delete crawlee: " + crawlee.GetValueByKey("Info"));
+				System.out.println("[SearchCrit] TutorGroup Going to delete crawlee: " + crawlee.GetValueByKey("Info"));
 				crawlee_ite.remove();
 			}
 		}

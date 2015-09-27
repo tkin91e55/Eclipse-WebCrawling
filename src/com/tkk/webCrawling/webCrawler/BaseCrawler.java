@@ -35,6 +35,11 @@ public abstract class BaseCrawler extends Thread {
 	protected String CRIT_LOCATION_KEY = "WC_SEARCH_OUT_CRIT";
 	protected String CRIT_PRICE_KEY = "WC_SEARCH_COND_PRICE_ABOVE";
 	protected String[] config_header_mapping = { "WEB_KEY", "TYPE", "VALUE" };
+	private CrawlerKeyBinding mID;
+
+	public CrawlerKeyBinding get_mID() {
+		return mID;
+	}
 
 	protected BaseCrawler.CrawlingStates mState;
 	protected List<Crawlee> crawlees = new ArrayList<Crawlee>();
@@ -47,7 +52,8 @@ public abstract class BaseCrawler extends Thread {
     
 	protected BaseCrawler (CrawlerKeyBinding id,String threadName) {
 		System.out.println("[BaseCrawler] constructed called and parse in config");
-		ParseInResultAction(id);
+		mID = id;
+		ParseInResultAction(mID);
 		if(thread == null){
 			thread = new Thread(this, threadName);
 			System.out.println("[thread] thread, " + threadName + " created.");

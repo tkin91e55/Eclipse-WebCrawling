@@ -106,9 +106,10 @@ public class Crawlee implements Callable<Document> {
 	public Document call() {
 		try {
 			
-			if(((TutorGroupCrawler)this.getCrawlerBelonged()).mID == BaseCrawler.CrawlerKeyBinding.TutorGroup){
+			if(this.getCrawlerBelonged().get_mID() == BaseCrawler.CrawlerKeyBinding.TutorGroup){
 				state = State.SUCCESS;
 				crawlerBelonged.AnalyzeContentAction(this);
+				return null;
 			}
 			
 			Jdoc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)
@@ -119,7 +120,6 @@ public class Crawlee implements Callable<Document> {
 				// TODO: retry if you can
 			} else {
 				state = State.SUCCESS;
-				System.out.println("[Crawlee] success state changed");
 				crawlerBelonged.AnalyzeContentAction(this);
 			}
 

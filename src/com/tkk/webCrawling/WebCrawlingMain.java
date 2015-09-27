@@ -17,8 +17,8 @@ public class WebCrawlingMain {
 
 		// declared all the websites
 		List<BaseCrawler> crawlers = new ArrayList<BaseCrawler>();
-		//crawlers.add(ECTutorCrawler.GetInstance());
-		//crawlers.add(L4TutorCrawler.GetInstance());
+		crawlers.add(ECTutorCrawler.GetInstance());
+		crawlers.add(L4TutorCrawler.GetInstance());
 		crawlers.add(TutorGroupCrawler.GetInstance());
 
 		// WAIT, until constructors finish and have websites get their
@@ -63,13 +63,12 @@ public class WebCrawlingMain {
 
 		System.out.println(String.format("[%s crawlees] size before filter: %s",crlr.toString(),crlr.getCrawlees().size()));
 		crlr.FilterByCritAction();
-
 		System.out.println(String.format("[%s crawlees] size after filter: %s",crlr.toString(),crlr.getCrawlees().size()));
 		}
 
 		// WAIT, until writing DB file, write result file (this is
 		// postprocessing)
-		/*for (BaseCrawler crlr : crawlers) {
+		for (BaseCrawler crlr : crawlers) {
 		crlr.PostProcessAction();
 		}
 		
@@ -84,7 +83,10 @@ public class WebCrawlingMain {
 			filewriter.AppendOnNewLine("The case index: " + cr.getCase_index());
 			filewriter.AppendOnNewLine(cr.Context());
 		}
-		filewriter.Close();*/
+		for (Crawlee cr : TutorGroupCrawler.GetInstance().getCrawlees()) {
+			filewriter.AppendOnNewLine(cr.Context());
+		}
+		filewriter.Close();
 
 		System.out.println("Program main runned to LAST line!");
 

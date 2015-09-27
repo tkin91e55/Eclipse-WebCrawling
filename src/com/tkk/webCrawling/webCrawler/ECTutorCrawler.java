@@ -20,14 +20,13 @@ public class ECTutorCrawler extends BaseCrawler {
 
 	String URL_KEY = "WC_URL";
 	String URL_INDEX_KEY = "WC_INDEX_URL";
-	static final CrawlerKeyBinding mID = CrawlerKeyBinding.ECTutor;
 	static final String threadName = "ECTutor-thread";
 
 	private static ECTutorCrawler instance = null;
 
 	protected ECTutorCrawler() {
 		// exists only to defeat instantiation
-		super(mID,threadName);
+		super(BaseCrawler.CrawlerKeyBinding.ECTutor,threadName);
 	}
 
 	public static ECTutorCrawler GetInstance() {
@@ -109,9 +108,9 @@ public class ECTutorCrawler extends BaseCrawler {
 		Elements lastUpdate = doc.select(searchNodes.get("LastUpdateAt"));
 		Elements eles = doc.select(searchNodes.get("Details"));
 
+		crawlee.Put("Website","Website: " + this.toString());
 		crawlee.Put("Location", "Location: " + location.text());
 		crawlee.Put("LastUpdateAt", "Last Update: " + lastUpdate.text());
-		crawlee.Put("Website","Website: " + this.toString());
 		crawlee.Put("Time", eles.get(0).text());
 		crawlee.Put("Gender", eles.get(1).text());
 		crawlee.Put("Info", eles.get(2).text());

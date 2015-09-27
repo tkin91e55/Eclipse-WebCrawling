@@ -20,14 +20,13 @@ public class L4TutorCrawler extends BaseCrawler {
 
 	String URL_KEY = "WC_URL";
 	String URL_INDEX_KEY = "WC_INDEX_URL";
-	static final CrawlerKeyBinding mID = CrawlerKeyBinding.L4Tutor;
 	static final String threadName = "L4Tutor-thread";
 
 	private static L4TutorCrawler instance = null;
 
 	protected L4TutorCrawler() {
 		// exists only to defeat instantiation
-		super(mID,threadName);
+		super(BaseCrawler.CrawlerKeyBinding.L4Tutor,threadName);
 
 	}
 
@@ -110,9 +109,9 @@ public class L4TutorCrawler extends BaseCrawler {
 		Elements lastUpdate = doc.select(searchNodes.get("LastUpdateAt"));
 		Elements eles = doc.select(searchNodes.get("Details"));
 
+		crawlee.Put("Website","Website: " + this.toString());
 		crawlee.Put("Location", "Location: " + location.text());
 		crawlee.Put("LastUpdateAt", "Last Update: " + lastUpdate.text());
-		crawlee.Put("Website","Website: " + this.toString());
 		crawlee.Put("Time", eles.get(0).text());
 		crawlee.Put("Gender", eles.get(1).text());
 		crawlee.Put("Info", eles.get(2).text());
@@ -137,7 +136,7 @@ public class L4TutorCrawler extends BaseCrawler {
 			}
 
 			if (beDeleted) {
-				System.out.println("[SearchCrit] Going to delete crawlee: " + crawlee.getCase_index());
+				System.out.println("[SearchCrit] L4Tutor Going to delete crawlee: " + crawlee.getCase_index());
 				crawlee_ite.remove();
 			}
 		}
@@ -147,7 +146,7 @@ public class L4TutorCrawler extends BaseCrawler {
 		super.PostProcessAction();
 		// Result:
 		for (Crawlee cr : crawlees) {
-			System.out.println("[SearchCrit] Remaining crawlee: " + cr.getCase_index());
+			System.out.println("[SearchCrit] L4Tutor Remaining crawlee: " + cr.getCase_index());
 		}
 	}
 
