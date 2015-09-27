@@ -42,7 +42,7 @@ public class ConcurrencyMachine {
 			// By this method, all Future runned and then this parent jump to
 			// next line
 			if(requests.size() < 60){
-				System.out.println("[InvokingRequet] the requests size not qualified");
+				System.out.println("[InvokingRequet] the requests size not qualified, and size is: " + requests.size());
 			}
 			handles = executorService.invokeAll(requests);
 		} catch (Exception e) {

@@ -26,7 +26,7 @@ public abstract class BaseCrawler extends Thread {
 	 * Binding of Crawler object (programming logical concept) with a key Since
 	 * there is no reason for a strange web key to tell program run
 	 */
-	protected enum CrawlerKeyBinding {
+	public enum CrawlerKeyBinding {
 		TutorGroup, ECTutor, L4Tutor
 	}
 
@@ -103,6 +103,7 @@ public abstract class BaseCrawler extends Thread {
 
 	public void AnalyzeContentAction(Crawlee crwl) {
 		mState = CrawlingStates.STATE_ANALYSE_CONTENT;
+		System.out.println("[BaseCrawler] AnalyzeContentAction() called");
 	}
 
 	public void FilterByCritAction() {

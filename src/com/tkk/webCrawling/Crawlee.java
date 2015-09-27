@@ -102,17 +102,24 @@ public class Crawlee implements Callable<Document> {
 		return "";
 	}
 
+	@SuppressWarnings("static-access")
 	public Document call() {
 		try {
+			
+			if(((TutorGroupCrawler)this.getCrawlerBelonged()).mID == BaseCrawler.CrawlerKeyBinding.TutorGroup){
+				state = State.SUCCESS;
+				crawlerBelonged.AnalyzeContentAction(this);
+			}
+			
 			Jdoc = Jsoup.connect(url).data("query", "Java").userAgent("Mozilla").cookie("auth", "token").timeout(10000)
 					.get();
-
 			String errStr = "Server Error";
 			if (Jdoc.title().contains(errStr) || Jdoc.text().contains(errStr)) {
 				state = State.FAILURE;
 				// TODO: retry if you can
 			} else {
 				state = State.SUCCESS;
+				System.out.println("[Crawlee] success state changed");
 				crawlerBelonged.AnalyzeContentAction(this);
 			}
 

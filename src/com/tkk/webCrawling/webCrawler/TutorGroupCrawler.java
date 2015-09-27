@@ -17,7 +17,7 @@ public class TutorGroupCrawler extends BaseCrawler {
 
 	public static String URL_KEY = "WC_URL";
 
-	static final CrawlerKeyBinding mID = CrawlerKeyBinding.TutorGroup;
+	public static final CrawlerKeyBinding mID = CrawlerKeyBinding.TutorGroup;
 	static final String threadName = "TutorGroup-thread";
 	private static TutorGroupCrawler instance = null;
 
@@ -26,11 +26,9 @@ public class TutorGroupCrawler extends BaseCrawler {
 	}
 
 	public static TutorGroupCrawler GetInstance() {
-
 		if (instance == null) {
 			instance = new TutorGroupCrawler();
 		}
-
 		return instance;
 	}
 
@@ -62,6 +60,20 @@ public class TutorGroupCrawler extends BaseCrawler {
 		}
 
 		// Do search part:
+		AnalyzeContentAction(tmpDocs,tmpCrles);
+
+		synchronized (crawlees) {
+			crawlees.addAll(tmpCrles);
+			System.out.println("[TutorGroup] crawlees size: " + crawlees.size());
+			crawlees.notify();
+		}
+
+	}
+
+	public void AnalyzeContentAction(Crawlee crawlee) {
+	}
+
+	void AnalyzeContentAction(List<Document> Docs, List<Crawlee> Crles) {
 		String JsoupSearchNode_HEAD = "span[id$=cs%d]";
 		String JsoupSearchNode_CONTENT = "div[id$=cdiv%d]";
 
@@ -71,7 +83,7 @@ public class TutorGroupCrawler extends BaseCrawler {
 		String todayDay = df.format(today);
 		Pattern TodayPattern = Pattern.compile(todayDay);
 
-		for (Document aDoc : tmpDocs) {
+		for (Document aDoc : Docs) {
 			for (int i = 0; i < 30; i++) {
 				String header = String.format(JsoupSearchNode_HEAD, i);
 				String text = String.format(JsoupSearchNode_CONTENT, i);
@@ -104,15 +116,51 @@ public class TutorGroupCrawler extends BaseCrawler {
 				System.out.println(headingStr);
 				System.out.println(contentStr);
 
-				tmpCrles.add(new Crawlee(0, "", this));
+				Crawlee tmpCrle = new Crawlee(0, "", this);
+				tmpCrle.Put("Fee", "Fee: " + GetFee(headingStr));
+				tmpCrle.Put("Info", "Info :" + headingStr);
+				tmpCrle.Put("Website", "Website: " + this.toString());
+				tmpCrle.Put("Other", "Other: " + contentStr);
+
+				Crles.add(tmpCrle);
 			}
 		}
+	}
+	
+	String GetFee(String aText) {
+		Pattern price = Pattern.compile("\\$[0-9]{2,4}");
+		Matcher matcher = price.matcher(aText);
+		if(matcher.find()){
+			System.out.println("[SearchCritP] the price is : " + matcher.group(0) + " and the text: " + aText);
+			return matcher.group(0) + "/hr";
+			}
+		return "$98734/hr"; 
+	}
+	
+	public void FilterByCritAction() {
+		super.FilterByCritAction();
 		
-		synchronized (crawlees) {
-			crawlees.addAll(tmpCrles);
-			System.out.println("crawlees size: " + crawlees.size());
-			crawlees.notify();
-		}
+		for (Iterator<Crawlee> crawlee_ite = crawlees.iterator(); crawlee_ite.hasNext();) {
+			Crawlee crawlee = crawlee_ite.next();
+			Boolean beDeleted = true;
 
+			if (FilterInBySubject(crawlee.Context())) {
+				if (!FilterByFee(crawlee)) {
+					if (FilterOutByLocation(crawlee.Context())) {
+						beDeleted = false;
+					}
+				}
+			}
+
+			if (beDeleted) {
+				System.out.println("[SearchCrit] Going to delete crawlee: " + crawlee.GetValueByKey("Info"));
+				crawlee_ite.remove();
+			}
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "TutorGroupCrawler";
 	}
 }

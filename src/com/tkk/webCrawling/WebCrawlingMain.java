@@ -40,7 +40,7 @@ public class WebCrawlingMain {
 			ConcurrencyMachine.GetInstance().RegisterQueue(crles);
 		}
 
-		/*ConcurrencyMachine.GetInstance().InvokeQueue();
+		ConcurrencyMachine.GetInstance().InvokeQueue();
 
 		// WAIT, until crawled and crawlee mature, write to same DB file
 		// need to lock the log file
@@ -61,15 +61,15 @@ public class WebCrawlingMain {
 			}
 		}
 
-		System.out.println(String.format("[%s crawlees] size 3: %s",crlr.toString(),crlr.getCrawlees().size()));
+		System.out.println(String.format("[%s crawlees] size before filter: %s",crlr.toString(),crlr.getCrawlees().size()));
 		crlr.FilterByCritAction();
 
-		System.out.println(String.format("[%s crawlees] size 4: %s",crlr.toString(),crlr.getCrawlees().size()));
+		System.out.println(String.format("[%s crawlees] size after filter: %s",crlr.toString(),crlr.getCrawlees().size()));
 		}
 
 		// WAIT, until writing DB file, write result file (this is
 		// postprocessing)
-		for (BaseCrawler crlr : crawlers) {
+		/*for (BaseCrawler crlr : crawlers) {
 		crlr.PostProcessAction();
 		}
 		

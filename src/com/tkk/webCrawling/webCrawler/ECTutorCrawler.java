@@ -146,7 +146,7 @@ public class ECTutorCrawler extends BaseCrawler {
 		super.PostProcessAction();
 		// Result:
 		for (Crawlee cr : crawlees) {
-			System.out.println("[SearchCrit] Remaining crawlee: " + cr.getCase_index());
+			System.out.println("[SearchCrit] ECTutor Remaining crawlee: " + cr.getCase_index());
 		}
 	}
 
