@@ -127,7 +127,7 @@ public class L4TutorCrawler extends BaseCrawler {
 			Crawlee crawlee = crawlee_ite.next();
 			Boolean beDeleted = true;
 
-			if (FilterInBySubject(crawlee.GetValueByKey("Subject"))) {
+			if (FilterInBySubject(crawlee.Context())) {
 				if (!FilterByFee(crawlee)) {
 					if (FilterOutByLocation(crawlee.Context())) {
 						beDeleted = false;
